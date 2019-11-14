@@ -43,8 +43,9 @@ router.post('/login', async (req, res) => {
         city: user.location.city,
         country: user.location.country
       },
-      validated: false,
-      active: true,
+      admin: user.admin,
+      validated: user.validated,
+      active: user.active
     }
   }, process.env.SECRET_TOKEN, { expiresIn: '2h' });
 
