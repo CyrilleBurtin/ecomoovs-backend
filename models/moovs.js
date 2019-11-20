@@ -53,7 +53,8 @@ var moovShema = mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId, ref: 'users'
   },
-  img: String
+  img: String,
+  validated: String
 })
 
 var moovModel = mongoose.model('moovs', moovShema);
