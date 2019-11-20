@@ -22,7 +22,7 @@ router.post('/photo', function(req, res){
 
 /* POST add moov */
 router.post('/', function(req, res){
-  console.log(req.file);
+  console.log('req.body',req.body);
   let newMoov = new moovModel({
     type : req.body.type,
     name : req.body.name,
