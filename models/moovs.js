@@ -45,8 +45,7 @@ var moovShema = mongoose.Schema({
   },
   regNumber: String,
   tags: {
-    type: [],
-    required: true
+    type: []
   },
   facebook: String,
   instagram: String,

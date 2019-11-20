@@ -8,7 +8,8 @@ const options = {
   connectTimeoutMS: 5000,
   useNewUrlParser: true,
   useCreateIndex: true,
-  useFindAndModify: false
+  useFindAndModify: false,
+  useUnifiedTopology: true
 }
 
 mongoose.connect(process.env.DB_CONNECT,
