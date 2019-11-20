@@ -54,7 +54,7 @@ var moovShema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, ref: 'users'
   },
   img: String,
-  validated: String
+  validated: Boolean
 })
 
 var moovModel = mongoose.model('moovs', moovShema);

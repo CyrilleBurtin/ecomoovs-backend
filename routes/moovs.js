@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const moovModel = require('../models/moovs');
 const cloudinary = require('cloudinary');
+
+
 /* GET moov list */
 router.get('/', function(req, res) {
-  moovModel.find(function(error, moovs){
+  moovModel.find({validated : true},function(error, moovs){
     if (error) {res.json(error)}
     else {res.json(moovs)}
   });
