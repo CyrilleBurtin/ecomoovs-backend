@@ -5,14 +5,22 @@ const jwt = require('jsonwebtoken');
 const verifyJWTToken = require('../libs/auth')
 
 //* GET users listing AUTH
-router.get('/:token', (req, res) => {
-  if (verifyJWTToken(req.params.token)) {
+router.get('/', (req, res) => {
+  
   userModel.find(function (error, users) {
     if (error) { res.json(error) }
     else { res.json(users) }
   });
-}
+
 });
+// router.get('/:token', (req, res) => {
+//   if (verifyJWTToken(req.params.token)) {
+//   userModel.find(function (error, users) {
+//     if (error) { res.json(error) }
+//     else { res.json(users) }
+//   });
+// }
+// });
 
 
 
