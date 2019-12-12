@@ -3,20 +3,20 @@ const moovModel = require("../models/moovs");
 
 const controllers = {};
 
-/* GET moov list */
+//* GET moov list */
 controllers.moovList = (req, res) => {
   moovModel.find({ validated: true }, (error, moovs) => {
     error ? res.json(error) : res.json(moovs);
   });
 };
 
-/* Upload photo */
+//* Upload photo */
 
 controllers.addPhoto = (req, res) => {
   console.log("photo add", req.files);
 };
 
-/* POST add moov */
+//* POST add moov */
 controllers.addMoov = (req, res) => {
   let newMoov = new moovModel({
     type: req.body.moov.type,
@@ -49,7 +49,7 @@ controllers.addMoov = (req, res) => {
   });
 };
 
-/* PUT edit moov */
+//* PUT edit moov */
 controllers.editMoov = (req, res) => {
   moovModel.findByIdAndUpdate(
     req.body._id,
@@ -86,7 +86,7 @@ controllers.editMoov = (req, res) => {
   );
 };
 
-/* DELETE moov */
+//* DELETE moov */
 controllers.deleteMoov = (req, res) => {
   console.log(req.params);
   moovModel.findByIdAndDelete(req.params.id, (error, moov) => {

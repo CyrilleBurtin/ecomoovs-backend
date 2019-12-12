@@ -2,12 +2,12 @@ const newsModel = require("../models/news");
 
 const controllers = {};
 
-/* GET news list */
+//* GET news list */
 controllers.newsList = (req, res) => {
   newsModel.find((error, data) => (error ? res.json(error) : res.json(data)));
 };
 
-/* POST add news */
+//* POST add news */
 controllers.addNews = (req, res) => {
   console.log(req.file);
   let newNews = new newsModel({
@@ -23,7 +23,7 @@ controllers.addNews = (req, res) => {
   });
 };
 
-/* PUT edit news */
+//* PUT edit news */
 controllers.editNews = (req, res) => {
   newsModel.findByIdAndUpdate(
     req.body._id,
@@ -46,7 +46,7 @@ controllers.editNews = (req, res) => {
   );
 };
 
-/* DELETE news */
+//* DELETE news */
 controllers.deleteNews = (req, res) => {
   console.log(req.params);
   newsModel.findByIdAndDelete(req.params.id, (error, news) => {

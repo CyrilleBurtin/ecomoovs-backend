@@ -8,7 +8,7 @@ router.post("/login", controllers.login);
 // POST add new users
 router.post("/", controllers.addUser);
 
-// check user Token for next routes
+//! check user Token for next routes
 router.use(authCheck);
 
 // GET users listing
