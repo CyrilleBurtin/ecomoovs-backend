@@ -1,101 +1,24 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const moovModel = require('../models/moovs');
-const cloudinary = require('cloudinary');
-
+const authCheck = require("../libs/auth");
+const controllers = require("../controllers/moovs-controller")
 
 /* GET moov list */
-router.get('/', function(req, res) {
-  moovModel.find({validated : true},function(error, moovs){
-    if (error) {res.json(error)}
-    else {res.json(moovs)}
-  });
-});
-
+router.get("/", controllers.moovList);
 
 /* Upload photo */
-
-router.post('/photo', function(req, res){
-  console.log('photo add', req.files)
-  
-
-});
-
+router.post("/photo", controllers.addPhoto);
 
 /* POST add moov */
-router.post('/', function(req, res){
-   let newMoov = new moovModel({
-    type : req.body.moov.type,
-    name : req.body.moov.name,
-    location: {
-      address : req.body.moov.address,
-      zipcode : req.body.moov.zipcode,
-      city : req.body.moov.city,
-      country : req.body.moov.country
-    },
-    email : req.body.moov.email,
-    phone : req.body.moov.phone,
-    url : req.body.moov.url,
-    title : req.body.moov.title,
-    punchLine : req.body.moov.punchLine,
-    description : req.body.moov.description,
-    regNumber : req.body.moov.regNumber,
-    tags : req.body.moov.tags,
-    facebook : req.body.moov.facebook,
-    instagram : req.body.moov.instagram,
-    twitter : req.body.moov.twitter,
-    userId : req.body.moov.userId,
-    validated : false
-  });
+router.post("/", controllers.addMoov);
 
-  newMoov.save(function(error, moov){
-    if (error){ res.json({error, fail:'faill'}) }
-    else { res.json({registration: true, moov}) }
-  });
-
-});
+// check user Token for next routes
+router.use(authCheck);
 
 /* PUT edit moov */
-router.put('/', function(req, res){
-
-  moovModel.findByIdAndUpdate(req.body._id, {
-    type : req.body.type,
-    name : req.body.name,
-    location: {
-      address : req.body.address,
-      zipcode : req.body.zipcode,
-      city : req.body.city,
-      country : req.body.country
-    },
-    email : req.body.email,
-    phone : req.body.phone,
-    url : req.body.url,
-    title : req.body.title,
-    punchLine : req.body.punchLine,
-    description : req.body.description,
-    regNumber : req.body.regNumber,
-    tags : req.body.tags,
-    facebook : req.body.facebook,
-    instagram : req.body.instagram,
-    twitter : req.body.twitter,
-  },{
-    new: true,
-    select :{
-      __v: false
-    }
-  }, function(error, moov){
-    if (error) { res.json(error) }
-    else { res.json(moov) }
-  });
-});
+router.put("/", controllers.editMoov);
 
 /* DELETE moov */
-router.delete('/:id([0-9a-f]{24})', function(req, res){
-  console.log(req.params);
-  moovModel.findByIdAndDelete(req.params.id, function(error, moov){
-    if (error){ res.json(error) }
-    else { res.json({Message : "moov deleted", moov}) }
-  })
-})
+router.delete("/:id([0-9a-f]{24})", controllers.deleteMoov);
 
 module.exports = router;

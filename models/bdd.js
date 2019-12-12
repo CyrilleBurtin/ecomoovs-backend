@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 // .set('debug', true);
 
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 
 const options = {
@@ -10,17 +10,10 @@ const options = {
   useCreateIndex: true,
   useFindAndModify: false,
   useUnifiedTopology: true
-}
+};
 
-mongoose.connect(process.env.DB_CONNECT,
-  options,
-  (err) =>  {
-     if (err) {
-      console.log(err);
-      } else {
-      console.log('Base de données connectée')
-      }
-   }
-);
+mongoose.connect(process.env.DB_CONNECT, options, err => {
+  err ? console.log(err) : console.log("Base de données connectée");
+});
 
 module.exports = mongoose;

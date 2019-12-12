@@ -1,5 +1,5 @@
-var mongoose = require('../models/bdd');
-var uniqueValidator = require('mongoose-unique-validator');
+var mongoose = require("../models/bdd");
+var uniqueValidator = require("mongoose-unique-validator");
 
 var userSchema = mongoose.Schema({
   creationDate: {
@@ -9,13 +9,13 @@ var userSchema = mongoose.Schema({
   firstname: {
     type: String,
     required: true,
-    min : 4,
+    min: 4,
     max: 255
   },
   lastname: {
     type: String,
     required: true,
-    min : 4,
+    min: 4,
     max: 255
   },
   email: {
@@ -23,14 +23,14 @@ var userSchema = mongoose.Schema({
     required: true,
     unique: true,
     uniqueCaseInsensitive: true,
-    min : 4,
+    min: 4,
     max: 255
   },
   password: {
     type: String,
     required: true,
-    min : 6,
-    max : 1024
+    min: 6,
+    max: 1024
   },
   phone: String,
   location: {
@@ -53,7 +53,5 @@ var userSchema = mongoose.Schema({
   }
 });
 
-var userModel = mongoose.model('users', userSchema);
 userSchema.plugin(uniqueValidator);
-
-module.exports = userModel;
+module.exports = mongoose.model("users", userSchema);

@@ -1,4 +1,4 @@
-var mongoose = require('../models/bdd');
+var mongoose = require("../models/bdd");
 
 var moovShema = mongoose.Schema({
   creationDate: {
@@ -51,11 +51,11 @@ var moovShema = mongoose.Schema({
   instagram: String,
   twitter: String,
   userId: {
-    type: mongoose.Schema.Types.ObjectId, ref: 'users'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users"
   },
   img: String,
   validated: Boolean
-})
+});
 
-var moovModel = mongoose.model('moovs', moovShema);
-module.exports = moovModel;
+module.exports = mongoose.model("moovs", moovShema);
