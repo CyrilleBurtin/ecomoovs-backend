@@ -20,7 +20,7 @@ controllers.login = async (req, res) => {
   // passvord check
   const validePass = await bcrypt.compare(req.body.password, user.password);
   !validePass ? res.status(400).send("email ou mot de passe non valide") : null;
-
+  console.log('test')
   //building token with user info
   try {
     let token = jwt.sign(
@@ -48,7 +48,7 @@ controllers.login = async (req, res) => {
     res.json(token);
     console.log("token", token);
   } catch (error) {
-    res.json(token);
+    res.json(error);
     console.log("error", error);
   }
 };

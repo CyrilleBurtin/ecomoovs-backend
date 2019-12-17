@@ -10,8 +10,7 @@ controllers.moovList = (req, res) => {
   });
 };
 
-//* Upload photo */
-
+//TODO Upload photo */
 controllers.addPhoto = (req, res) => {
   console.log("photo add", req.files);
 };

@@ -7,7 +7,7 @@ const controllers = require("../controllers/moovs-controller");
 router.get("/", controllers.moovList);
 
 //! check user Token for next routes
-router.use(authCheck);
+// router.use(authCheck);
 
 /* Upload photo */
 router.post("/photo", controllers.addPhoto);
