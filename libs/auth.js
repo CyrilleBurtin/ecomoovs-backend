@@ -1,24 +1,22 @@
 const jwt = require("jsonwebtoken");
-
 module.exports = (req, res, next) => {
   if (req.method === "OPTIONS") {
     return next();
   }
-  const token = req.headers.authorization.split(" ")[1];
-  const tokenChecker = jwt.verify(
-    token,
-    process.env.SECRET_TOKEN,
-    (err, decodedToken) => {
-      var currentTime = Date.now() / 1000;
+  try {
+    console.log('req.headers', req.headers)
+    let header = JASON.parse(req.headers.authorization)
+    const token = req.headers.authorization.split(" ")[1];
 
-      if (err || !decodedToken) {
-        return console.log(err);
-      } else if (decodedToken > current_time) {
-        return decodedToken;
-      } else {
-        return false
-      }
+    if (!token) {
+      throw new Error("Authentification failed");
     }
-  );
-  return tokenChecker;
+
+ 
+    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
+    req.userData = { userId: decodedToken.userId };
+    next();
+  } catch (err) {
+    throw new Error("Authentification failed");
+  }
 };

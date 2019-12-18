@@ -8,8 +8,8 @@ router.post("/login", controllers.login);
 // POST add new users
 router.post("/", controllers.addUser);
 
-//! check user Token for next routes
-router.use(authCheck);
+// ! check user Token for next routes
+// router.use(authCheck);
 
 // GET users listing
 router.get("/", controllers.usersList);

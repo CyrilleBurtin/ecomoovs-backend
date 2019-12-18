@@ -7,7 +7,7 @@ const controllers = require("../controllers/news-controller");
 router.get("/", controllers.newsList);
 
 //! check user Token for next routes
-router.use(authCheck);
+// router.use(authCheck);
 
 /* POST add news */
 router.post("/", controllers.addNews);
