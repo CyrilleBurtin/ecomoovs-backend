@@ -78,13 +78,31 @@ controllers.addUser = async (req, res) => {
     } else if (error) {
       res.json({ registration: false, message: error.message });
     } else if (user) {
-      let usr = user.toObject({
-        minimize: true,
-        versionKey: false,
-        hide: "password insert_date",
-        transform: true
-      });
-      res.json({ registration: true, user: usr });
+      console.log("user", user);
+
+      let token = jwt.sign(
+        {
+          user: {
+            _id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            phone: user.phone,
+            location: {
+              address: user.location.address,
+              zipcode: user.location.zipcode,
+              city: user.location.city,
+              country: user.location.country
+            },
+            admin: user.admin,
+            validated: user.validated,
+            active: user.active
+          }
+        },
+        process.env.SECRET_TOKEN,
+        { expiresIn: "2h" }
+      );
+      res.json({ registration: true, token: token });
     } else {
       res.json({ registration: false });
     }

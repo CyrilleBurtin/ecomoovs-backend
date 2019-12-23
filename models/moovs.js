@@ -38,7 +38,7 @@ var moovShema = mongoose.Schema({
     type: String,
     required: true
   },
-  punchLine: String,
+  punchline: String,
   description: {
     type: String,
     required: true

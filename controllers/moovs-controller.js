@@ -18,26 +18,26 @@ controllers.addPhoto = (req, res) => {
 //* POST add moov */
 controllers.addMoov = (req, res) => {
   let newMoov = new moovModel({
-    type: req.body.moov.type,
-    name: req.body.moov.name,
+    type: req.body.type,
+    name: req.body.name,
     location: {
-      address: req.body.moov.address,
-      zipcode: req.body.moov.zipcode,
-      city: req.body.moov.city,
-      country: req.body.moov.country
+      address: req.body.address,
+      zipcode: req.body.zipcode,
+      city: req.body.city,
+      country: req.body.country
     },
-    email: req.body.moov.email,
-    phone: req.body.moov.phone,
-    url: req.body.moov.url,
-    title: req.body.moov.title,
-    punchLine: req.body.moov.punchLine,
-    description: req.body.moov.description,
-    regNumber: req.body.moov.regNumber,
-    tags: req.body.moov.tags,
-    facebook: req.body.moov.facebook,
-    instagram: req.body.moov.instagram,
-    twitter: req.body.moov.twitter,
-    userId: req.body.moov.userId,
+    email: req.body.email,
+    phone: req.body.phone,
+    url: req.body.url,
+    title: req.body.title,
+    punchline: req.body.punchLine,
+    description: req.body.description,
+    regNumber: req.body.regNumber,
+    tags: req.body.tags,
+    facebook: req.body.facebook,
+    instagram: req.body.instagram,
+    twitter: req.body.twitter,
+    userId: req.body.userId,
     validated: false
   });
 
