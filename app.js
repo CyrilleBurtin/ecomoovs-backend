@@ -1,3 +1,6 @@
+const fs = require("fs");
+
+
 const fileUpload = require("express-fileupload");
 const express = require("express");
 const createError = require("http-errors");
@@ -17,10 +20,10 @@ const app = express();
 
 // cors
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header(
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Methods", "*");
+  res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin,X-Requested-With,Content-Type,Accept,content-type,application/json, Authorization"
   );
@@ -31,7 +34,7 @@ app.use((req, res, next) => {
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use(fileUpload());
+app.use(fileUpload({ useTempFiles: true }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -49,15 +52,32 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
+app.use((req, res, next) => {
+  const error = new HttpError("Could not find this route.", 404);
+  throw error;
+});
+
 // error handler
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
+  // if (req.file) {
+  //   console.log('unlink', req.file)
+  //   fs.unlink(req.file.path, (err) => {
+  //     err ? console.log('err', err) : console.log('file removed', req.file.path)
+  //   });
+  // }
+
+  if (res.headerSent) {
+    return next(err);
+  }
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.json({ message: err.message || "An unknown error occurred!" });
+
+  
 });
 
 module.exports = app;
