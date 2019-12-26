@@ -1,6 +1,3 @@
-const fs = require("fs");
-
-
 const fileUpload = require("express-fileupload");
 const express = require("express");
 const createError = require("http-errors");
@@ -62,13 +59,6 @@ app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // if (req.file) {
-  //   console.log('unlink', req.file)
-  //   fs.unlink(req.file.path, (err) => {
-  //     err ? console.log('err', err) : console.log('file removed', req.file.path)
-  //   });
-  // }
 
   if (res.headerSent) {
     return next(err);
