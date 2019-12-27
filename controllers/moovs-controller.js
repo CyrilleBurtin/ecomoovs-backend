@@ -11,6 +11,17 @@ controllers.moovList = (req, res) => {
   });
 };
 
+//* FIND tags in moov with user request
+controllers.findTags = (req, res) => {
+ 
+  console.log('req.body', req.body)
+
+  moovModel.find({ tags: { $all : req.body }}, (error, moovs) => {
+    error ? res.json(error) : res.json(moovs);
+  });
+
+}
+
 //* POST add moov */
 controllers.addMoov = (req, res) => {
 
@@ -18,7 +29,9 @@ controllers.addMoov = (req, res) => {
   const height = 600;
   const width = 1200;
   const folder = "ecomoovs/moovs"
-
+  let tags = req.body.tags.toLowerCase().split(",")
+  console.log('tags', tags)
+  return
   //called by imageUpload function
   const setMoov = result => {
     console.log("result", result);
@@ -38,7 +51,7 @@ controllers.addMoov = (req, res) => {
       punchline: req.body.punchLine,
       description: req.body.description,
       regNumber: req.body.regNumber,
-      tags: req.body.tags,
+      tags: tags,
       img: result.eager[0].url,
       facebook: req.body.facebook,
       instagram: req.body.instagram,
