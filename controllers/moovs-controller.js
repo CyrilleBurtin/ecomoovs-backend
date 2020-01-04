@@ -2,7 +2,6 @@ const moovModel = require("../models/moovs");
 const imageUpload = require("../middleware/imageUpload");
 const controllers = {};
 
-
 //* GET moov list */
 controllers.moovList = (req, res) => {
   // moovModel.find({ validated: true }, (error, moovs) => {
@@ -13,25 +12,21 @@ controllers.moovList = (req, res) => {
 
 //* FIND tags in moov with user request
 controllers.findTags = (req, res) => {
- 
-  console.log('req.body', req.body)
+  console.log("req.body", req.body);
 
-  moovModel.find({ tags: { $all : req.body }}, (error, moovs) => {
+  moovModel.find({ tags: { $all: req.body } }, (error, moovs) => {
     error ? res.json(error) : res.json(moovs);
   });
-
-}
+};
 
 //* POST add moov */
 controllers.addMoov = (req, res) => {
-
   // set image size and folder
   const height = 600;
   const width = 1200;
-  const folder = "ecomoovs/moovs"
-  let tags = req.body.tags.toLowerCase().split(",")
-  console.log('tags', tags)
-  return
+  const folder = "ecomoovs/moovs";
+  let tags = req.body.tags.toLowerCase().split(",");
+
   //called by imageUpload function
   const setMoov = result => {
     console.log("result", result);
@@ -59,21 +54,20 @@ controllers.addMoov = (req, res) => {
       userId: req.body.userId,
       validated: false
     });
-    
+
     newMoov.save((error, moov) => {
       error
-      ? res.json({ error, fail: "faill" })
-      : res.json({ registration: true, moov });
+        ? res.json({ error, fail: "faill" })
+        : res.json({ registration: true, moov });
     });
   };
 
   // image upload function
   imageUpload(req, setMoov, width, height, folder);
+};
 
-}
-  
-  //* PUT edit moov */
-  controllers.editMoov = (req, res) => {
+//* PUT edit moov */
+controllers.editMoov = (req, res) => {
   moovModel.findByIdAndUpdate(
     req.body._id,
     {

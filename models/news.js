@@ -13,7 +13,7 @@ var newsShema = mongoose.Schema({
     type: String,
     required: true
   },
-  punchLine: {
+  punchline: {
     type: String,
     required: true
   },
@@ -21,11 +21,19 @@ var newsShema = mongoose.Schema({
     type: String,
     required: true
   },
+  url: {
+    type: String
+  },
+  tags: {
+    type: []
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
-  img: String
+  image: {
+    type: String
+  }
 });
 
 module.exports = mongoose.model("news", newsShema);

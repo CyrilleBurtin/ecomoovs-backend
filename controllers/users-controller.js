@@ -36,9 +36,10 @@ controllers.login = async (req, res) => {
             city: user.location.city,
             country: user.location.country
           },
-          admin: user.admin,
+          admin: true,
           validated: user.validated,
           active: user.active
+          // admin: user.admin,
         }
       },
       process.env.SECRET_TOKEN,

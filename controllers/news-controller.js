@@ -1,5 +1,5 @@
 const newsModel = require("../models/news");
-
+const imageUpload = require("../middleware/imageUpload");
 const controllers = {};
 
 //* GET news list */
@@ -9,18 +9,28 @@ controllers.newsList = (req, res) => {
 
 //* POST add news */
 controllers.addNews = (req, res) => {
-  console.log(req.file);
-  let newNews = new newsModel({
-    author: req.body.author,
-    title: req.body.title,
-    punchLine: req.body.punchLine,
-    description: req.body.description,
-    userId: req.body.userId
-  });
+  const height = 600;
+  const width = 1200;
+  const folder = "ecomoovs/news";
+  let tags = req.body.tags.toLowerCase().split(",");
 
-  newNews.save((error, news) => {
-    error ? res.json(error) : res.json({ news });
-  });
+  const setNews = result => {
+    let newNews = new newsModel({
+      author: req.body.author,
+      title: req.body.title,
+      punchline: req.body.punchline,
+      description: req.body.description,
+      url: req.body.url,
+      tags: tags,
+      image: result.eager[0].url,
+      userId: req.body.userId
+    });
+
+    newNews.save((error, news) => {
+      error ? res.json(error) : res.json({ news });
+    });
+  };
+  imageUpload(req, setNews, width, height, folder);
 };
 
 //* PUT edit news */
@@ -30,7 +40,7 @@ controllers.editNews = (req, res) => {
     {
       author: req.body.author,
       title: req.body.title,
-      punchLine: req.body.punchLine,
+      punchline: req.body.punchline,
       description: req.body.description,
       userId: req.body.userId
     },
