@@ -13,7 +13,7 @@ const imageUpload = (req, setMoov, width, height, folder) => {
       folder: folder,
       resource_type: "image",
       format: "jpg",
-      eager: [{ width: width, height: height, crop: "pad" }]
+      eager: [{ width: width, height: height, crop: "fill" }]
     },
     (err, result) => {
       if (err) {
