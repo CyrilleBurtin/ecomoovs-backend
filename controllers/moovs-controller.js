@@ -1,19 +1,28 @@
-const moovModel = require("../models/moovs");
-const imageUpload = require("../middleware/imageUpload");
+const moovModel = require('../models/moovs');
+const imageUpload = require('../middleware/imageUpload');
+const imageDelete = require('../middleware/imageDelete');
+const mongoose = require('mongoose');
 const controllers = {};
 
 //* GET moov list */
 controllers.moovList = (req, res) => {
   // moovModel.find({ validated: true }, (error, moovs) => {
   moovModel.find((error, moovs) => {
+    moovs ? console.log('moovs', moovs) : console.log('error', error);
+    error ? res.json(error) : res.json(moovs);
+  });
+};
+
+//* GET MyMoovsList */
+controllers.myMoovs = (req, res) => {
+  var id = mongoose.Types.ObjectId(req.params.id);
+  moovModel.find({ userId: id }, (error, moovs) => {
     error ? res.json(error) : res.json(moovs);
   });
 };
 
 //* FIND tags in moov with user request
 controllers.findTags = (req, res) => {
-  console.log("req.body", req.body);
-
   moovModel.find({ tags: { $all: req.body } }, (error, moovs) => {
     error ? res.json(error) : res.json(moovs);
   });
@@ -24,12 +33,11 @@ controllers.addMoov = (req, res) => {
   // set image size and folder
   const height = 600;
   const width = 1200;
-  const folder = "ecomoovs/moovs";
-  let tags = req.body.tags.toLowerCase().split(",");
+  const folder = 'ecomoovs/moovs';
+  let tags = req.body.tags.toLowerCase().split(',');
 
   //called by imageUpload function
   const setMoov = result => {
-    console.log("result", result);
     let newMoov = new moovModel({
       type: req.body.type,
       name: req.body.name,
@@ -47,7 +55,7 @@ controllers.addMoov = (req, res) => {
       description: req.body.description,
       regNumber: req.body.regNumber,
       tags: tags,
-      img: result.eager[0].url,
+      img: result,
       facebook: req.body.facebook,
       instagram: req.body.instagram,
       twitter: req.body.twitter,
@@ -57,7 +65,7 @@ controllers.addMoov = (req, res) => {
 
     newMoov.save((error, moov) => {
       error
-        ? res.json({ error, fail: "faill" })
+        ? res.json({ error, fail: 'faill' })
         : res.json({ registration: true, moov });
     });
   };
@@ -105,9 +113,11 @@ controllers.editMoov = (req, res) => {
 
 //* DELETE moov */
 controllers.deleteMoov = (req, res) => {
-  console.log(req.params);
+
+  imageDelete(`ecomoovs/moovs/${req.params.img}`);
+ 
   moovModel.findByIdAndDelete(req.params.id, (error, moov) => {
-    error ? res.json(error) : res.json({ Message: "moov deleted", moov });
+    error ? res.json(error) : res.json({ Message: 'moov deleted', moov });
   });
 };
 

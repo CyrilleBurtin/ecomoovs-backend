@@ -54,7 +54,7 @@ var moovShema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
   },
-  img: String,
+  img: Object,
   validated: Boolean
 });
 

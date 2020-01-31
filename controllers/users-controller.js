@@ -112,6 +112,7 @@ controllers.addUser = async (req, res) => {
 
 //* UPDATE edit user
 controllers.editUser = (req, res) => {
+  console.log('ici', req.body)
   userModel.findByIdAndUpdate(
     req.params.id,
     {
@@ -119,18 +120,30 @@ controllers.editUser = (req, res) => {
       lastname: req.body.lastname,
       email: req.body.email,
       phone: req.body.phone,
-      location: req.body.location
+      location: {
+        address: req.body.address,
+        zipcode: req.body.zipcode,
+        city: req.body.city,
+        country: req.body.country
+      }
     },
     {
       new: true,
       select: {
         password: false,
-        token: false,
-        __v: false
+          __v: false
       }
     },
-    (error, update) => {
-      error ? res.json(error) : res.json(update);
+    (error, user) => {
+      console.log('update', user)
+      let token = jwt.sign(
+        {user : user}
+        ,
+        process.env.SECRET_TOKEN,
+        { expiresIn: "2h" }
+      );
+      console.log('token', token)
+      error ? res.json(error) : res.json(token);
     }
   );
 };
