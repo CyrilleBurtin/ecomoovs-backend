@@ -51,7 +51,7 @@ controllers.addMoov = (req, res) => {
       phone: req.body.phone,
       url: req.body.url,
       title: req.body.title,
-      punchline: req.body.punchLine,
+      punchline: req.body.punchline,
       description: req.body.description,
       regNumber: req.body.regNumber,
       tags: tags,
@@ -76,6 +76,7 @@ controllers.addMoov = (req, res) => {
 
 //* PUT edit moov */
 controllers.editMoov = (req, res) => {
+  let tags = req.body.tags.toLowerCase().split(',');
   moovModel.findByIdAndUpdate(
     req.body._id,
     {
@@ -91,13 +92,15 @@ controllers.editMoov = (req, res) => {
       phone: req.body.phone,
       url: req.body.url,
       title: req.body.title,
-      punchLine: req.body.punchLine,
+      punchline: req.body.punchline,
       description: req.body.description,
       regNumber: req.body.regNumber,
-      tags: req.body.tags,
+      tags: tags,
       facebook: req.body.facebook,
       instagram: req.body.instagram,
-      twitter: req.body.twitter
+      twitter: req.body.twitter,
+      userId: req.body.userId,
+      validated: req.body.validated
     },
     {
       new: true,
@@ -106,16 +109,15 @@ controllers.editMoov = (req, res) => {
       }
     },
     (error, moov) => {
-      error ? res.json(error) : res.json(moovs);
+      error ? res.json(error) : res.json(moov);
     }
   );
 };
 
 //* DELETE moov */
 controllers.deleteMoov = (req, res) => {
-
   imageDelete(`ecomoovs/moovs/${req.params.img}`);
- 
+
   moovModel.findByIdAndDelete(req.params.id, (error, moov) => {
     error ? res.json(error) : res.json({ Message: 'moov deleted', moov });
   });
