@@ -8,8 +8,7 @@ const controllers = {};
 controllers.moovList = (req, res) => {
   // moovModel.find({ validated: true }, (error, moovs) => {
   moovModel.find((error, moovs) => {
-    moovs ? console.log('moovs', moovs) : console.log('error', error);
-    error ? res.json(error) : res.json(moovs);
+    moovs ? res.json(moovs) : res.json(error);
   });
 };
 
@@ -22,10 +21,18 @@ controllers.myMoovs = (req, res) => {
 };
 
 //* FIND tags in moov with user request
-controllers.findTags = (req, res) => {
-  moovModel.find({ tags: { $all: req.body } }, (error, moovs) => {
-    error ? res.json(error) : res.json(moovs);
-  });
+controllers.findTags = async (req, res) => {
+  // moovModel.find({ tags: { $all: req.body } }, (error, moovs) => {
+  //   error ? res.json(error) : res.json(moovs);
+  // });
+  var aggregate = moovModel.aggregate();
+  aggregate.match({"tags": "supermarché"})
+
+  aggregate.group({ _id : "$tags"});
+  var data = await aggregate.exec();
+
+  console.log('data', data)
+
 };
 
 //* POST add moov */

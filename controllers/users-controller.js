@@ -1,6 +1,6 @@
-const userModel = require("../models/users");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const userModel = require('../models/users');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const controllers = {};
 
@@ -15,11 +15,11 @@ controllers.usersList = (req, res) => {
 controllers.login = async (req, res) => {
   // get user with email if exist
   const user = await userModel.findOne({ email: req.body.email });
-  !user ? res.status(400).send("email ou mot de passe non valide") : null;
+  !user ? res.status(400).send('email ou mot de passe non valide') : null;
 
   // passvord check
   const validePass = await bcrypt.compare(req.body.password, user.password);
-  !validePass ? res.status(400).send("email ou mot de passe non valide") : null;
+  !validePass ? res.status(400).send('email ou mot de passe non valide') : null;
   //building token with user info
   try {
     let token = jwt.sign(
@@ -43,19 +43,19 @@ controllers.login = async (req, res) => {
         }
       },
       process.env.SECRET_TOKEN,
-      { expiresIn: "2h" }
+      { expiresIn: '2h' }
     );
     res.json(token);
-    console.log("token", token);
+    console.log('token', token);
   } catch (error) {
     res.json(error);
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 
 //* POST add new users
 controllers.addUser = async (req, res) => {
-  console.log("req.body", req.body);
+  console.log('req.body', req.body);
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const newUser = new userModel({
     firstname: req.body.firstname,
@@ -75,11 +75,11 @@ controllers.addUser = async (req, res) => {
 
   newUser.save((error, user) => {
     if (error && error.code == 11000) {
-      res.json({ registration: false, error: "user already exist" });
+      res.json({ registration: false, error: 'user already exist' });
     } else if (error) {
       res.json({ registration: false, message: error.message });
     } else if (user) {
-      console.log("user", user);
+      console.log('user', user);
 
       let token = jwt.sign(
         {
@@ -101,7 +101,7 @@ controllers.addUser = async (req, res) => {
           }
         },
         process.env.SECRET_TOKEN,
-        { expiresIn: "2h" }
+        { expiresIn: '2h' }
       );
       res.json({ registration: true, token: token });
     } else {
@@ -112,7 +112,7 @@ controllers.addUser = async (req, res) => {
 
 //* UPDATE edit user
 controllers.editUser = (req, res) => {
-  console.log('ici', req.body)
+  console.log('ici', req.body);
   userModel.findByIdAndUpdate(
     req.params.id,
     {
@@ -131,54 +131,60 @@ controllers.editUser = (req, res) => {
       new: true,
       select: {
         password: false,
-          __v: false
+        __v: false
       }
     },
     (error, user) => {
-      console.log('update', user)
-      let token = jwt.sign(
-        {user : user}
-        ,
-        process.env.SECRET_TOKEN,
-        { expiresIn: "2h" }
-      );
-      console.log('token', token)
+      console.log('update', user);
+      let token = jwt.sign({ user: user }, process.env.SECRET_TOKEN, {
+        expiresIn: '2h'
+      });
+      console.log('token', token);
       error ? res.json(error) : res.json(token);
     }
   );
 };
 
 //* UPDATE edit password
-controllers.password = (req, res) => {
-  userModel.findById({ _id: req.body.id }, (error, user) => {
-    if (error) {
-      res.json(error);
-    } else {
-      userModel.findByIdAndUpdate(
-        req.body.id,
-        {
-          password: SHA256(req.body.password + user.token).toString(encBase64)
-        },
-        {
-          new: true,
-          select: {
-            password: false,
-            token: false,
-            __v: false
-          }
-        },
-        (error, update) => {
-          error ? res.json(error) : res.json(update);
+controllers.password = async (req, res) => {
+  // get user with email if exist
+  const user = await userModel.findOne({ _id: req.body.id });
+  !user ? res.status(400).send('Une nerreur est surnvenue') : null;
+
+  // passvord check
+  const validePass = await bcrypt.compare(
+    req.body.password.currentPassword,
+    user.password
+  );
+  
+  const hashedPassword = await bcrypt.hash(req.body.password.newPassword, 10);
+  if (!validePass) {
+    res.status(400).send('Mot de passe actuel incorrect');
+  } else {
+    userModel.findByIdAndUpdate(
+      req.body.id,
+      {
+        password: hashedPassword
+      },
+      {
+        new: true,
+        select: {
+          password: false,
+          token: false,
+          __v: false
         }
-      );
-    }
-  });
+      },
+      (error, update) => {
+        error ? res.json(error) : res.json(update);
+      }
+    );
+  }
 };
 
 //* DELETE delete users AUTH
 controllers.deleteUser = (req, res) => {
   userModel.findByIdAndDelete(req.params.id, (error, user) => {
-    error ? res.json(error) : res.json({ message: "ok", user });
+    error ? res.json(error) : res.json({ message: 'ok', user });
   });
 };
 
