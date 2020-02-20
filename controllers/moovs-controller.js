@@ -6,7 +6,7 @@ const controllers = {};
 
 //* GET moov list */
 controllers.moovList = (req, res) => {
-  // moovModel.find({ validated: true }, (error, moovs) => {
+
   moovModel.find((error, moovs) => {
     moovs ? res.json(moovs) : res.json(error);
   });
