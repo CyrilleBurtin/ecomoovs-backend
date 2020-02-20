@@ -22,16 +22,13 @@ controllers.myMoovs = (req, res) => {
 
 //* FIND tags in moov with user request
 controllers.findTags = async (req, res) => {
-  // moovModel.find({ tags: { $all: req.body } }, (error, moovs) => {
-  //   error ? res.json(error) : res.json(moovs);
-  // });
-  var aggregate = moovModel.aggregate();
-  aggregate.match({"tags": "supermarché"})
+  console.log('req.body', req.body)
+  let request = req.body.toString()
 
-  aggregate.group({ _id : "$tags"});
-  var data = await aggregate.exec();
+  moovModel.find({ searchTags: request  }, (error, moovs) => {
+    error ? res.json(error) : res.json(moovs);
+  });
 
-  console.log('data', data)
 
 };
 
@@ -42,6 +39,7 @@ controllers.addMoov = (req, res) => {
   const width = 1200;
   const folder = 'ecomoovs/moovs';
   let tags = req.body.tags.toLowerCase().split(',');
+  let searchTags = req.body.searchTags.toLowerCase().split(',');
 
   //called by imageUpload function
   const setMoov = result => {
@@ -62,6 +60,7 @@ controllers.addMoov = (req, res) => {
       description: req.body.description,
       regNumber: req.body.regNumber,
       tags: tags,
+      searchTags: searchTags,
       img: result,
       facebook: req.body.facebook,
       instagram: req.body.instagram,
@@ -84,6 +83,7 @@ controllers.addMoov = (req, res) => {
 //* PUT edit moov */
 controllers.editMoov = (req, res) => {
   let tags = req.body.tags.toLowerCase().split(',');
+  let searchTags = req.body.searchTags.toLowerCase().split(',');
   moovModel.findByIdAndUpdate(
     req.body._id,
     {
@@ -103,6 +103,7 @@ controllers.editMoov = (req, res) => {
       description: req.body.description,
       regNumber: req.body.regNumber,
       tags: tags,
+      searchTags: searchTags,
       facebook: req.body.facebook,
       instagram: req.body.instagram,
       twitter: req.body.twitter,
