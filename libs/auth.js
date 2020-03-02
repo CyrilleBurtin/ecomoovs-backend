@@ -1,22 +1,30 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
+
 module.exports = (req, res, next) => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return next();
   }
   try {
-    console.log('req.headers', req.headers)
-    let header = JASON.parse(req.headers.authorization)
-    const token = req.headers.authorization.split(" ")[1];
 
+    const token = req.headers.authorization.split(' ')[1];
+    console.log('token', token);
     if (!token) {
-      throw new Error("Authentification failed");
+      throw new Error('No token detected');
     }
 
- 
-    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
-    req.userData = { userId: decodedToken.userId };
+    try {
+      var decoded = jwt.verify(token, process.env.SECRET_TOKEN);
+    } catch (err) {
+      console.log('err', err);
+    }
+   
+    req.userData = { userId: decoded.userId };
+
     next();
-  } catch (err) {
-    throw new Error("Authentification failed");
+  } catch (error) {
+    throw new Error('Authentification failed');
+    return next(error);
   }
 };

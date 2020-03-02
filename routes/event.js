@@ -7,7 +7,7 @@ const controllers = require("../controllers/event-controller");
 router.get("/", controllers.eventList);
 
 //! check user Token for next routes
-// router.use(authCheck);
+router.use(authCheck);
 
 /* POST add event */
 router.post("/", controllers.addevent);
