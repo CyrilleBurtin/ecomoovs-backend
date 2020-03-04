@@ -7,20 +7,22 @@ module.exports = (req, res, next) => {
     return next();
   }
   try {
-
     const token = req.headers.authorization.split(' ')[1];
-  
+
     if (!token) {
       throw new Error('No token detected');
     }
 
     try {
-      var decoded = jwt.verify(token, process.env.SECRET_TOKEN);
-    } catch (err) {
-      console.log('err', err);
+      let decoded = jwt.decode(token, process.env.SECRET_TOKEN);
+      if (decoded.user.admin !== true) {
+        throw new Error('vous devez être administrataur');
+        return next(error);   
+      }
+    } catch (error) {
+      throw new Error('vous devez être administrataur');
+      return next(error);
     }
-   
-    req.userData = { userId: decoded.userId };
 
     next();
   } catch (error) {

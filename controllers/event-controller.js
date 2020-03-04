@@ -4,12 +4,11 @@ const controllers = {};
 
 //* GET event list */
 controllers.eventList = (req, res) => {
-  eventModel.find((error, data) => (error ? res.json(error) : res.json(data)));
+   eventModel.find((error, data) => (error ? res.json(error) : res.json(data)));
 };
 
 //* POST add event */
 controllers.addevent = (req, res) => {
-  console.log("req.body", req.body);
   let newevent = new eventModel({
     userId: req.body.userId,
     name: req.body.name,
@@ -31,7 +30,6 @@ controllers.addevent = (req, res) => {
 
 //* PUT edit event */
 controllers.editevent = (req, res) => {
-  console.log("req.body", req.body);
   eventModel.findByIdAndUpdate(
     req.body._id,
     {
@@ -61,7 +59,6 @@ controllers.editevent = (req, res) => {
 
 //* DELETE event */
 controllers.deleteevent = (req, res) => {
-  console.log(req.params);
   eventModel.findByIdAndDelete(req.params.id, (error, event) => {
     error ? res.json(error) : res.json({ Message: "event deleted", event });
   });

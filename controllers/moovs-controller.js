@@ -21,8 +21,7 @@ controllers.myMoovs = (req, res) => {
 };
 
 //* FIND tags in moov with user request
-controllers.findTags = async (req, res) => {
-  console.log('req.body', req.body)
+controllers.findTags = async (req, res) => {  
   let request = req.body.toString()
 
   moovModel.find({ searchTags: request  }, (error, moovs) => {

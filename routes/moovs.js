@@ -10,7 +10,7 @@ router.get('/myMoovs/:id([0-9a-f]{24})', controllers.myMoovs);
 
 router.post('/findTags', controllers.findTags);
 
-//! check user Token for next routes∆
+//! check user Token for next routes
 router.use(authCheck);
 
 /* POST add moov */

@@ -58,7 +58,6 @@ controllers.editNews = (req, res) => {
 
 //* DELETE news */
 controllers.deleteNews = (req, res) => {
-  console.log(req.params);
   newsModel.findByIdAndDelete(req.params.id, (error, news) => {
     error ? res.json(error) : res.json({ Message: "news deleted", news });
   });

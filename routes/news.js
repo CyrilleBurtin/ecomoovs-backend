@@ -9,8 +9,6 @@ router.get("/", controllers.newsList);
 //! check user Token for next routes
 router.use(authCheck);
 
-console.log('toto')
-
 /* POST add news */
 router.post("/", controllers.addNews);
 

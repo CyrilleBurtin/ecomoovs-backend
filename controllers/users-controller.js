@@ -55,7 +55,6 @@ controllers.login = async (req, res) => {
 
 //* POST add new users
 controllers.addUser = async (req, res) => {
-  console.log('req.body', req.body);
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const newUser = new userModel({
     firstname: req.body.firstname,
@@ -79,8 +78,6 @@ controllers.addUser = async (req, res) => {
     } else if (error) {
       res.json({ registration: false, message: error.message });
     } else if (user) {
-      console.log('user', user);
-
       let token = jwt.sign(
         {
           user: {
@@ -112,7 +109,6 @@ controllers.addUser = async (req, res) => {
 
 //* UPDATE edit user
 controllers.editUser = (req, res) => {
-  console.log('ici', req.body);
   userModel.findByIdAndUpdate(
     req.params.id,
     {
@@ -135,11 +131,9 @@ controllers.editUser = (req, res) => {
       }
     },
     (error, user) => {
-      console.log('update', user);
       let token = jwt.sign({ user: user }, process.env.SECRET_TOKEN, {
         expiresIn: '2h'
       });
-      console.log('token', token);
       error ? res.json(error) : res.json(token);
     }
   );
@@ -156,7 +150,7 @@ controllers.password = async (req, res) => {
     req.body.password.currentPassword,
     user.password
   );
-  
+
   const hashedPassword = await bcrypt.hash(req.body.password.newPassword, 10);
   if (!validePass) {
     res.status(400).send('Mot de passe actuel incorrect');
