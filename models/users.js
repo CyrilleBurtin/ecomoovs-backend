@@ -47,9 +47,9 @@ var userSchema = mongoose.Schema({
     type: Boolean,
     default: true
   },
-  admin: {
-    type: Boolean,
-    default: true
+  role: {
+    type: String,
+    default: 'user'
   }
 });
 

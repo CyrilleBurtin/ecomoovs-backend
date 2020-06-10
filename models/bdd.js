@@ -1,5 +1,5 @@
-var mongoose = require("mongoose");
-// .set('debug', true);
+var mongoose = require("mongoose")
+.set('debug', true);
 
 const dotenv = require("dotenv");
 dotenv.config();

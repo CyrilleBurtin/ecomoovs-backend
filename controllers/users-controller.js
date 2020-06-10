@@ -36,7 +36,7 @@ controllers.login = async (req, res) => {
             city: user.location.city,
             country: user.location.country
           },
-          admin: true,
+          role: user.role,
           validated: user.validated,
           active: user.active
           // admin: user.admin,
@@ -92,7 +92,7 @@ controllers.addUser = async (req, res) => {
               city: user.location.city,
               country: user.location.country
             },
-            admin: user.admin,
+            role: user.admin,
             validated: user.validated,
             active: user.active
           }

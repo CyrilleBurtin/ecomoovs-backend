@@ -6,7 +6,6 @@ const controllers = {};
 
 //* GET moov list */
 controllers.moovList = (req, res) => {
-
   moovModel.find((error, moovs) => {
     moovs ? res.json(moovs) : res.json(error);
   });
@@ -21,14 +20,24 @@ controllers.myMoovs = (req, res) => {
 };
 
 //* FIND tags in moov with user request
-controllers.findTags = async (req, res) => {  
-  let request = req.body.toString()
+controllers.findTags = (req, res) => {
+  console.log('object', req.body);
 
-  moovModel.find({ searchTags: request  }, (error, moovs) => {
-    error ? res.json(error) : res.json(moovs);
-  });
+ moovModel
+    .find({
 
+      $or: [
+        { tags: { $in: req.body.what } },
+        { name: { $in: req.body.what } },
+        { title: { $in: req.body.what } },
+        { description: { $in: req.body.what } },
+      ],
+      $and: [{ 'location.city': req.body.where }],
+    })
+    .collation({ locale: 'fr', strength: 1 })
 
+    .then((moovs) => res.json(moovs))
+    .catch((error) => console.log(error));
 };
 
 //* POST add moov */
@@ -38,10 +47,9 @@ controllers.addMoov = (req, res) => {
   const width = 1200;
   const folder = 'ecomoovs/moovs';
   let tags = req.body.tags.toLowerCase().split(',');
-  let searchTags = req.body.searchTags.toLowerCase().split(',');
 
   //called by imageUpload function
-  const setMoov = result => {
+  const setMoov = (result) => {
     let newMoov = new moovModel({
       type: req.body.type,
       name: req.body.name,
@@ -49,7 +57,7 @@ controllers.addMoov = (req, res) => {
         address: req.body.address,
         zipcode: req.body.zipcode,
         city: req.body.city,
-        country: req.body.country
+        country: req.body.country,
       },
       email: req.body.email,
       phone: req.body.phone,
@@ -59,13 +67,12 @@ controllers.addMoov = (req, res) => {
       description: req.body.description,
       regNumber: req.body.regNumber,
       tags: tags,
-      searchTags: searchTags,
       img: result,
       facebook: req.body.facebook,
       instagram: req.body.instagram,
       twitter: req.body.twitter,
       userId: req.body.userId,
-      validated: false
+      validated: false,
     });
 
     newMoov.save((error, moov) => {
@@ -92,7 +99,7 @@ controllers.editMoov = (req, res) => {
         address: req.body.address,
         zipcode: req.body.zipcode,
         city: req.body.city,
-        country: req.body.country
+        country: req.body.country,
       },
       email: req.body.email,
       phone: req.body.phone,
@@ -107,13 +114,13 @@ controllers.editMoov = (req, res) => {
       instagram: req.body.instagram,
       twitter: req.body.twitter,
       userId: req.body.userId,
-      validated: req.body.validated
+      validated: req.body.validated,
     },
     {
       new: true,
       select: {
-        __v: false
-      }
+        __v: false,
+      },
     },
     (error, moov) => {
       error ? res.json(error) : res.json(moov);
