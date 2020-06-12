@@ -11,6 +11,9 @@ controllers.moovList = (req, res) => {
   });
 };
 
+
+
+
 //* GET MyMoovsList */
 controllers.myMoovs = (req, res) => {
   var id = mongoose.Types.ObjectId(req.params.id);
@@ -19,26 +22,36 @@ controllers.myMoovs = (req, res) => {
   });
 };
 
-//* FIND tags in moov with user request
-controllers.findTags = (req, res) => {
-  console.log('object', req.body);
 
- moovModel
-    .find({
 
-      $or: [
-        { tags: { $in: req.body.what } },
-        { name: { $in: req.body.what } },
-        { title: { $in: req.body.what } },
-        { description: { $in: req.body.what } },
-      ],
-      $and: [{ 'location.city': req.body.where }],
-    })
+
+//* FIND in moovs with user request
+controllers.findMoovs = (req, res) => {
+
+  let request = {};
+
+  if (req.body.what.length > 0) {
+    request.$or = [
+      { tags: { $in: req.body.what } },
+      { name: { $in: req.body.what } },
+      { title: { $in: req.body.what } },
+      { description: { $in: req.body.what } },
+    ];
+  }
+
+  if (req.body.where.length > 0) {
+    request.$and = [{ 'location.city': req.body.where }];
+  }
+
+  moovModel
+    .find({ ...request })
     .collation({ locale: 'fr', strength: 1 })
-
     .then((moovs) => res.json(moovs))
     .catch((error) => console.log(error));
 };
+
+
+
 
 //* POST add moov */
 controllers.addMoov = (req, res) => {
@@ -77,7 +90,7 @@ controllers.addMoov = (req, res) => {
 
     newMoov.save((error, moov) => {
       error
-        ? res.json({ error, fail: 'faill' })
+        ? res.json({ error, fail: 'fail' })
         : res.json({ registration: true, moov });
     });
   };
@@ -85,6 +98,9 @@ controllers.addMoov = (req, res) => {
   // image upload function
   imageUpload(req, setMoov, width, height, folder);
 };
+
+
+
 
 //* PUT edit moov */
 controllers.editMoov = (req, res) => {
@@ -127,6 +143,9 @@ controllers.editMoov = (req, res) => {
     }
   );
 };
+
+
+
 
 //* DELETE moov */
 controllers.deleteMoov = (req, res) => {

@@ -8,7 +8,7 @@ router.get('/', controllers.moovList);
 
 router.get('/myMoovs/:id([0-9a-f]{24})', controllers.myMoovs);
 
-router.post('/findTags', controllers.findTags);
+router.post('/findMoovs', controllers.findMoovs);
 
 //! check user Token for next routes
 router.use(authCheck);
