@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
 
     try {
       let decoded = jwt.decode(token, process.env.SECRET_TOKEN);
-      if (decoded.user.admin !== true) {
+      if (decoded.user.role !== 'admin') {
         throw new Error('vous devez être administrataur');
         return next(error);   
       }
